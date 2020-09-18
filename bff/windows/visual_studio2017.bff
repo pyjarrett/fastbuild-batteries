@@ -26,23 +26,24 @@
 	Compiler('MSVC')
 	{
 		.Executable = '$VSBinPath$/cl.exe'
-			.Root = .VSBinPath
-			.ExtraFiles = { '$VSBinPath$/c1.dll'
-							'$VSBinPath$/c1xx.dll',
-							'$VSBinPath$/c2.dll',
-							'$VSBinPath$/msobj140.dll'
-							'$VSBinPath$/mspdb140.dll'
-							'$VSBinPath$/mspdbcore.dll'
-							'$VSBinPath$/mspdbsrv.exe'
-							'$VSBinPath$/mspft140.dll'
-							'$VSBinPath$/msvcp140.dll'
-							'$VSBinPath$/vcruntime140.dll'
-							'$VSBinPath$/1033/clui.dll'
-							'$VSBinPath$/1033/mspft140ui.dll' // Localized messages for static analysis
+			.ExtraFiles = {
+				'$VSBinPath$/c1.dll'
+				'$VSBinPath$/c1xx.dll',
+				'$VSBinPath$/c2.dll',
+				'$VSBinPath$/msobj140.dll'
+				'$VSBinPath$/mspdb140.dll'
+				'$VSBinPath$/mspdbcore.dll'
+				'$VSBinPath$/mspdbsrv.exe'
+				'$VSBinPath$/mspft140.dll'
+				'$VSBinPath$/msvcp140.dll'
+				'$VSBinPath$/vcruntime140.dll'
+				'$VSBinPath$/1033/clui.dll'
+				'$VSBinPath$/1033/mspft140ui.dll' // Localized messages for static analysis
 		}
 	}
 
-	.MSVCConfig = [
+	.Compiler_MSVC = [
+		.OS = 'Windows'
 		.Compiler = 'MSVC'
 		.CompilerOptions = '"%1"'           // Input
 			+ ' /Fo"%2"'       // Output
@@ -55,16 +56,16 @@
 			+ ' /EHsc'
 			+ ' /D_CRT_SECURE_NO_WARNINGS'
 
-		.FlSysInc = " /I"
+		.CFlSysInc = " /I"
 
 		.BaseIncludePaths = ' /I"$VSBasePath$/VC/include/"'
 			+ ' /I"$VSBasePath$/include/"'
-			+ ' /I"C:/Program Files (x86)/Windows Kits/10/Include/$Windows10KitsVersion$"'
-			+ ' /I"C:/Program Files (x86)/Windows Kits/10/Include/$Windows10KitsVersion$/ucrt"'
-			+ ' /I"C:/Program Files (x86)/Windows Kits/10/Include/$Windows10KitsVersion$/winrt"'
-			+ ' /I"C:/Program Files (x86)/Windows Kits/10/Include/$Windows10KitsVersion$/cppwinrt"'
-			+ ' /I"C:/Program Files (x86)/Windows Kits/10/Include/$Windows10KitsVersion$/shared"'
-			+ ' /I"C:/Program Files (x86)/Windows Kits/10/Include/$Windows10KitsVersion$/um"'
+			+ ' /I"$Windows10KitsPath$/Include/$Windows10KitsVersion$"'
+			+ ' /I"$Windows10KitsPath$/Include/$Windows10KitsVersion$/ucrt"'
+			+ ' /I"$Windows10KitsPath$/Include/$Windows10KitsVersion$/winrt"'
+			+ ' /I"$Windows10KitsPath$/Include/$Windows10KitsVersion$/cppwinrt"'
+			+ ' /I"$Windows10KitsPath$/Include/$Windows10KitsVersion$/shared"'
+			+ ' /I"$Windows10KitsPath$/Include/$Windows10KitsVersion$/um"'
 			+ ' /I"src/"'
 		.CompilerOptions + .BaseIncludePaths
 
@@ -91,13 +92,35 @@
 
 		.Librarian = '$VSBinPath$/lib.exe'
 		.LibrarianOptions = '/NODEFAULTLIB /WX /NOLOGO /OUT:"%2" "%1"'
-
-		.OS = 'Windows'
 	]
 
-	.WindowsMSVCConfig = .WindowsConfig + .MSVCConfig
-	.InputConfigs = { .WindowsMSVCConfig }
+	.Config_Debug = [
+		.ConfigName = 'Debug'
+		.ConfigCompilerOptions = ''
+		.ConfigLinkerOptions = ''
+	]
+	
+	.Config_Release = [
+		.ConfigName = 'Release'
+		.ConfigCompilerOptions = ''
+		.ConfigLinkerOptions = ''
+	]
+
+	.Configs = { .Config_Debug, .Config_Release }
+
+	ForEach(.Config in .Configs)
+	{
+		.CombinedConfig = [
+			Using(.OS_Windows)
+			Using(.Compiler_MSVC)
+			Using(.Config)
+			
+			.CompilerOptions + .ConfigCompilerOptions
+			.LinkerOptions + .ConfigLinkerOptions
+		]
+		^InputConfigs = { .CombinedConfig }
+	}
 }
 
-.Targets_Windows_MSVC = {}
-
+.Targets_Windows_MSVC_Debug = {}
+.Targets_Windows_MSVC_Release = {}

@@ -10,15 +10,15 @@
 
 	.Compiler_GCC = [
 		.OS = 'Linux'
-		.Compiler = 'GCC'
 
 		// System Include.
-		.FlSysInc = ' -I'
+		.CFlSysInc = ' -I'
 
+		.Compiler = 'GCC'
 		.CompilerOptions = ' -c "%1"'
 						+ ' -o "%2"'
 						+ ' -D_POSIX_C_SOURCE=199309L'
-						+ ' $FlSysInc$src/'
+						+ ' $CFlSysInc$src/'
 						+ .CommonCompilerFlags
 
 		.Linker = '/usr/bin/g++'
@@ -56,4 +56,3 @@
 
 .Targets_Linux_GCC_Debug = {}
 .Targets_Linux_GCC_Release = {}
-

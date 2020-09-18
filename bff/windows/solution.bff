@@ -1,0 +1,37 @@
+// Create the solution on Windows
+#if __WINDOWS__
+.ProjectCommon =
+[
+    // https://docs.microsoft.com/en-us/cpp/build/reference/common-macros-for-build-commands-and-properties?view=vs-2019
+	.OutputDirectory            = '^$(SolutionDir)\Temp'
+	.IntermediateDirectory      = '^$(SolutionDir)\Temp'
+	.BuildLogFile               = '^$(SolutionDir)\Temp\^$(ProjectName)-^$(Configuration).log'
+	.PlatformToolset            = '$VSPlatformToolset$'
+	.Platform                   = 'x64'
+]
+
+VCXProject('Project_Update')
+{
+	Using(.ProjectCommon)
+	.ProjectOutput = '$ProjectBase$/Update.vcxproj'
+	.ProjectFiles = { './fbuild.bff' }
+	.ProjectInputPaths = { 'bff/' }
+	.ProjectBasePath = './'
+
+	.ProjectBuildCommand = 'cd ^$(SolutionDir)\..\ &amp; fbuild -vs -monitor -fastcancel -cache Sln_All'
+	.ProjectRebuildCommand = 'cd ^$(SolutionDir)\..\ &amp; fbuild -vs -monitor -fastcancel -cache -clean Sln_All'
+	
+	Using(.ProjectDefaults)
+}
+
+.All_Projects + { 'Project_Update' }
+VSSolution('Sln_All')
+{
+	.SolutionOutput = '$SolutionBase$/All.sln'
+	.SolutionProjects = .All_Projects
+
+	//.SolutionDependencies = .AllDependencies
+	.SolutionVisualStudioVersion = .VSVersion
+	.SolutionMinimumVisualStudioVersion = .VSVersion
+}
+#endif // __WINDOWS__

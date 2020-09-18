@@ -1,5 +1,4 @@
 #once
-
 {
 	Compiler('Clang')
 	{
@@ -8,16 +7,16 @@
 
 	.Compiler_Clang = [
 		.OS = 'Linux'
-		.Compiler = 'Clang'
 
 		// System Include.
-		.FlSysInc = ' -I'
+		.CFlSysInc = ' -I'
 
+		.Compiler = 'Clang'
 		.CompilerOptions = ' -c "%1"'
 						+ ' -o "%2"'
 						+ ' --stdlib=libstdc++'
 						+ ' -D_POSIX_C_SOURCE=199309L'
-						+ ' $FlSysInc$src/'
+						+ ' $CFlSysInc$src/'
 						+ .CommonCompilerFlags
 
 		.Linker = '/usr/bin/clang++'
@@ -55,5 +54,3 @@
 
 .Targets_Linux_Clang_Debug = {}
 .Targets_Linux_Clang_Release = {}
-
-
