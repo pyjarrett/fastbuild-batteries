@@ -1,0 +1,21 @@
+#once
+
+.OS_Linux = [
+	.Librarian = '/usr/bin/ar'
+	.LibrarianOptions = 'rcs "%2" "%1"'
+
+	.ExeExtension = ''
+	.LibPrefix = 'lib'
+	.LibStaticSuffix = '.a'
+	.LibSharedSuffix = '.so'
+]
+
+.CommonCompilerFlags = ' --std=c++17'
+					+ ' -fno-rtti'
+					+ ' -fno-exceptions'
+					+ ' -Wall'
+					+ ' -Wextra'
+					// Eliminate extra dead code
+					+ ' -ffunction-sections -fdata-sections'
+					+ ' -Wshadow -Wdouble-promotion -Wundef -Wconversion -fno-common'
+

@@ -1,0 +1,33 @@
+#once
+
+//
+// Postlude wraps together all of the generated build configurations and then
+// generating `All_*` targets.
+//
+
+ForEach(.BuildConfig in .BuildConfigs)
+{
+	Using(.BuildConfig)
+
+	// Constuct an all build target for each build flavor.
+	Alias('All_$Flavor$')
+	{
+		.Targets = .'Targets_$Flavor$'
+	}
+	^Targets_All + 'All_$Flavor$'
+}
+
+Alias('All_Debug')
+{
+	.Targets = .Targets_Debug
+}
+
+Alias('All_Release')
+{
+	.Targets = .Targets_Release
+}
+
+Alias('All')
+{
+	.Targets = .Targets_All
+}

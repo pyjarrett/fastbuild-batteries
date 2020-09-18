@@ -1,0 +1,103 @@
+#once
+
+// Input               Example
+// .VS2017Version      14.16.27023
+//
+// Expects .VS2017Version to be defined.
+{
+	//
+	// Visual Studio 2017
+	//
+	.VS2017BasePath = 'C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/$VS2017Version$'
+
+	//
+	// Visual Studio Version Selection
+	//
+	.VSVersion = .VS2017Version
+	.VSBasePath = .VS2017BasePath
+
+	//
+	// Visual Studio Basic Settings
+	//
+	.VSBinPath = '$VSBasePath$/bin/Hostx64/x64/'
+	.VSLibPath = '$VSBasePath$/lib/x64'
+	.VCPackagesPath = '$VSBasePath$/../Common7/IDE/VC/vcpackages'
+
+	Compiler('MSVC')
+	{
+		.Executable = '$VSBinPath$/cl.exe'
+			.Root = .VSBinPath
+			.ExtraFiles = { '$VSBinPath$/c1.dll'
+							'$VSBinPath$/c1xx.dll',
+							'$VSBinPath$/c2.dll',
+							'$VSBinPath$/msobj140.dll'
+							'$VSBinPath$/mspdb140.dll'
+							'$VSBinPath$/mspdbcore.dll'
+							'$VSBinPath$/mspdbsrv.exe'
+							'$VSBinPath$/mspft140.dll'
+							'$VSBinPath$/msvcp140.dll'
+							'$VSBinPath$/vcruntime140.dll'
+							'$VSBinPath$/1033/clui.dll'
+							'$VSBinPath$/1033/mspft140ui.dll' // Localized messages for static analysis
+		}
+	}
+
+	.MSVCConfig = [
+		.Compiler = 'MSVC'
+		.CompilerOptions = '"%1"'           // Input
+			+ ' /Fo"%2"'       // Output
+			+ ' /Z7'           // Debug format (in .obj)
+			+ ' /c'            // Compile only
+			+ ' /nologo'       // No compiler spam
+			+ ' /W4'           // Warning level 4
+			//+ ' /WX'           // Warnings as errors
+			+ ' /std:c++17'    // C++17
+			+ ' /EHsc'
+			+ ' /D_CRT_SECURE_NO_WARNINGS'
+
+		.FlSysInc = " /I"
+
+		.BaseIncludePaths = ' /I"$VSBasePath$/VC/include/"'
+			+ ' /I"$VSBasePath$/include/"'
+			+ ' /I"C:/Program Files (x86)/Windows Kits/10/Include/$Windows10KitsVersion$"'
+			+ ' /I"C:/Program Files (x86)/Windows Kits/10/Include/$Windows10KitsVersion$/ucrt"'
+			+ ' /I"C:/Program Files (x86)/Windows Kits/10/Include/$Windows10KitsVersion$/winrt"'
+			+ ' /I"C:/Program Files (x86)/Windows Kits/10/Include/$Windows10KitsVersion$/cppwinrt"'
+			+ ' /I"C:/Program Files (x86)/Windows Kits/10/Include/$Windows10KitsVersion$/shared"'
+			+ ' /I"C:/Program Files (x86)/Windows Kits/10/Include/$Windows10KitsVersion$/um"'
+			+ ' /I"src/"'
+		.CompilerOptions + .BaseIncludePaths
+
+		.Linker = '$VSBinPath$/link.exe'
+		.LinkerOptions = ' /OUT:"%2"'     // Output
+			+ ' "%1"'          // Input
+			+ ' /WX'           // Warnings as errors
+			+ ' /NOLOGO'       // No linker spam
+			+ ' /DEBUG'        // Keep debug info when linking
+			//+ ' /NODEFAULTLIB' // We'll specify the libs explicitly
+			+ ' libcmt.lib'
+			+ ' libvcruntime.lib'
+			+ ' libucrt.lib'
+			+ ' uuid.lib'
+			+ ' user32.lib'
+
+		.LibPaths = ' /LIBPATH:"$Windows10SDKBasePath$/Lib"'
+			+ ' /LIBPATH:"$VSBasePath$/VC/lib"'
+			+ ' /LIBPATH:"$VSBasePath$/lib/x64"'
+			+ ' /LIBPATH:"$WindowsKitsLibPath$/ucrt/x64"'
+			+ ' /LIBPATH:"C:/Program Files (x86)/Windows Kits/10/Lib/$Windows10KitsVersion$/ucrt/x64"'
+			+ ' /LIBPATH:"C:/Program Files (x86)/Windows Kits/10/Lib/$Windows10KitsVersion$/um/x64"'
+		.LinkerOptions + .LibPaths
+
+		.Librarian = '$VSBinPath$/lib.exe'
+		.LibrarianOptions = '/NODEFAULTLIB /WX /NOLOGO /OUT:"%2" "%1"'
+
+		.OS = 'Windows'
+	]
+
+	.WindowsMSVCConfig = .WindowsConfig + .MSVCConfig
+	.InputConfigs = { .WindowsMSVCConfig }
+}
+
+.Targets_Windows_MSVC = {}
+

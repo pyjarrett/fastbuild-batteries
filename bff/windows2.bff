@@ -1,0 +1,8 @@
+#once
+
+.VSPlatformToolset = 'v141'
+.VS2017Version = '14.16.27023'
+
+#include "windows/windows10_sdk.bff"
+#include "windows/visual_studio2017.bff"
+

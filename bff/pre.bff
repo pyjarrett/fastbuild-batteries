@@ -1,0 +1,43 @@
+#once
+
+// The location to save all build output.
+.OutputBase = 'build'
+
+//
+// Generate the .InputConfigs needed for every possible build flavor, and
+// .Targets_$Flavor$ for keeping track of all targets.
+//
+.InputConfigs = {}
+
+#if __LINUX__
+#include "linux.bff"
+#endif
+
+#if __WINDOWS__
+#include "windows.bff"
+#endif
+
+//
+// Targets based on configuration.
+//
+.Targets_Debug   = {}
+.Targets_Release = {}
+.Targets_All     = {}
+
+//
+// Final pass to add common variables, turning .InputConfigs into
+// ready-to-use .BuildConfigs.
+//
+.BuildConfigs = {}
+ForEach(.InputConfig in .InputConfigs)
+{
+	.BuildConfig = [
+		Using(.InputConfig)
+
+		.Flavor = '$OS$_$Compiler$_$ConfigName$'
+		.OutputBase = '$OutputBase$/$Flavor$'
+		.CompilerOutputPath = '$OutputBase$/objects/'
+	]
+	^BuildConfigs + .BuildConfig
+}
+

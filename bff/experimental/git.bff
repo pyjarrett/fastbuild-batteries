@@ -1,0 +1,17 @@
+#once
+{
+	// Checks out a git repository from a given source.
+	//
+	//
+	function GitCheckout(.RepoName .RepoSource .RepoLocation)
+	{
+		Exec('Git_Clone_$RepoName$')
+		{
+			.ExecExecutable = '/usr/bin/git'
+			.ExecOutput = '.clones/$RepoLocation$'
+			.ExecUseStdOutAsOutput = true
+			.ExecArguments = 'clone "$RepoName$" "$RepoLocation$"'
+			.ExecAlwaysShowOutput = true
+		}
+	}
+}

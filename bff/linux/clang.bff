@@ -1,0 +1,59 @@
+#once
+
+{
+	Compiler('Clang')
+	{
+		.Executable = '/usr/bin/clang++'
+	}
+
+	.Compiler_Clang = [
+		.OS = 'Linux'
+		.Compiler = 'Clang'
+
+		// System Include.
+		.FlSysInc = ' -I'
+
+		.CompilerOptions = ' -c "%1"'
+						+ ' -o "%2"'
+						+ ' --stdlib=libstdc++'
+						+ ' -D_POSIX_C_SOURCE=199309L'
+						+ ' $FlSysInc$src/'
+						+ .CommonCompilerFlags
+
+		.Linker = '/usr/bin/clang++'
+		.LinkerOptions = ' --output "%2"'
+						+ ' "%1"'
+	]
+
+	.Config_Debug = [
+		.ConfigName = 'Debug'
+		.ConfigCompilerOptions = ' -g'
+		.ConfigLinkerOptions = ''
+	]
+
+	.Config_Release = [
+		.ConfigName = 'Release'
+		.ConfigCompilerOptions = ''
+		.ConfigLinkerOptions = ''
+	]
+
+	.Configs = { .Config_Debug, .Config_Release }
+
+	ForEach(.Config in .Configs)
+	{
+		.CombinedConfig = [
+			Using(.OS_Linux)
+			Using(.Compiler_Clang)
+			Using(.Config)
+			.CompilerOptions + .ConfigCompilerOptions
+			.LinkerOptions + .ConfigLinkerOptions
+		]
+
+		^InputConfigs + { .CombinedConfig }
+	}
+}
+
+.Targets_Linux_Clang_Debug = {}
+.Targets_Linux_Clang_Release = {}
+
+

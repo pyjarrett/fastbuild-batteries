@@ -1,0 +1,39 @@
+#once
+{
+	// Defines build settings for the Windows platform.
+	//
+	// Reference configurations in FASTBuild itself:
+	// - https://github.com/fastbuild/fastbuild/blob/master/External/SDK/Windows/
+	// - https://github.com/fastbuild/fastbuild/blob/master/External/SDK/VisualStudio/VisualStudio.bff
+	// - https://github.com/fastbuild/fastbuild/blob/master/External/SDK/Windows/Windows10SDK.bff
+	//
+
+	//
+	// Generic Windows Settings
+	//
+	Settings
+	{
+		.Environment = { //"PATH=$VSBasePath$\Common7\IDE\;$VSBasePath$\VC\bin\",
+							"TMP=C:\Windows\Temp",
+							"SystemRoot=C:\Windows" }
+	}
+
+	#include "windows/windows10_sdk.bff"
+
+	.WindowsConfig = [
+		.ExeExtension = '.exe'
+		.LibPrefix = ''
+		.LibStaticSuffix = '.lib'
+		.LibSharedSuffix = '.dll'
+	]
+
+	// .VSQuandaryRoot = '^$(SolutionDir)..\quandary'
+
+	#include "visual_studio.bff"
+
+
+	// Projects to be included in the Visual Studio Solution.
+}
+
+.AllProjects = {}
+.AllDependencies = {}

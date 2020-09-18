@@ -1,0 +1,59 @@
+#once
+
+{
+	#include "common.bff"
+
+	Compiler('GCC')
+	{
+		.Executable = '/usr/bin/g++'
+	}
+
+	.Compiler_GCC = [
+		.OS = 'Linux'
+		.Compiler = 'GCC'
+
+		// System Include.
+		.FlSysInc = ' -I'
+
+		.CompilerOptions = ' -c "%1"'
+						+ ' -o "%2"'
+						+ ' -D_POSIX_C_SOURCE=199309L'
+						+ ' $FlSysInc$src/'
+						+ .CommonCompilerFlags
+
+		.Linker = '/usr/bin/g++'
+		.LinkerOptions = ' --output "%2"'
+						+ ' "%1"'
+	]
+
+	.Config_Debug = [
+		.ConfigName = 'Debug'
+		.ConfigCompilerOptions = ' -g'
+		.ConfigLinkerOptions = ''
+	]
+
+	.Config_Release = [
+		.ConfigName = 'Release'
+		.ConfigCompilerOptions = ''
+		.ConfigLinkerOptions = ''
+	]
+
+	.Configs = { .Config_Debug, .Config_Release }
+
+	ForEach(.Config in .Configs)
+	{
+		.CombinedConfig = [
+			Using(.OS_Linux)
+			Using(.Compiler_GCC)
+			Using(.Config)
+			.CompilerOptions + .ConfigCompilerOptions
+			.LinkerOptions + .ConfigLinkerOptions
+		]
+
+		^InputConfigs + { .CombinedConfig }
+	}
+}
+
+.Targets_Linux_GCC_Debug = {}
+.Targets_Linux_GCC_Release = {}
+
