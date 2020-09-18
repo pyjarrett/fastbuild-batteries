@@ -4,6 +4,10 @@
 // .VS2017Version      14.16.27023
 //
 // Expects .VS2017Version to be defined.
+
+.VSVersion = ''
+.VSBasePath = ''
+
 {
 	//
 	// Visual Studio 2017
@@ -13,8 +17,8 @@
 	//
 	// Visual Studio Version Selection
 	//
-	.VSVersion = .VS2017Version
-	.VSBasePath = .VS2017BasePath
+	^VSVersion = .VS2017Version
+	^VSBasePath = .VS2017BasePath
 
 	//
 	// Visual Studio Basic Settings
@@ -118,9 +122,7 @@
 			.CompilerOptions + .ConfigCompilerOptions
 			.LinkerOptions + .ConfigLinkerOptions
 		]
-		^InputConfigs = { .CombinedConfig }
+		^InputConfigs + { .CombinedConfig }
 	}
 }
 
-.Targets_Windows_MSVC_Debug = {}
-.Targets_Windows_MSVC_Release = {}

@@ -8,36 +8,40 @@
 // - https://github.com/fastbuild/fastbuild/blob/master/External/SDK/Windows/Windows10SDK.bff
 //
 
+.OS_Windows = [
+    .ExeExtension = '.exe'
+    .LibPrefix = ''
+    .LibStaticSuffix = '.lib'
+    .LibSharedSuffix = '.dll'
+]
+
+.SolutionBase = '$OutputBase$/'
+.ProjectBase = '$OutputBase$/Projects'
+
+.VSPlatformToolset = 'v141'
+.VS2017Version = '14.16.27023'
+
+.ProjectDefaults = [
+    .PlatformToolset = .VSPlatformToolset
+]
+
+#include "windows/windows10_sdk.bff"
+#include "windows/visual_studio2017.bff"
+
 //
 // Generic Windows Settings
 //
 Settings
 {
-	.Environment = {
-		"PATH=$VSBasePath$\Common7\IDE\;$VSBasePath$\VC\bin\",
-		"TMP=C:\Windows\Temp",
-		"SystemRoot=C:\Windows"
-	}
+    .Environment = {
+        "PATH=$VSBasePath$\Common7\IDE\;$VSBasePath$\VC\bin\",
+        "TMP=C:\Windows\Temp",
+        "SystemRoot=C:\Windows"
+    }
 }
 
-.SolutionBase = '$OutputBase$/'
-.ProjectBase = '$OutputBase$/Projects'
+.Targets_Windows_MSVC_Debug = {}
+.Targets_Windows_MSVC_Release = {}
 
-#include "windows/windows10_sdk.bff"
+.All_Projects = {}
 
-{
-	.OS_Windows = [
-		.ExeExtension = '.exe'
-		.LibPrefix = ''
-		.LibStaticSuffix = '.lib'
-		.LibSharedSuffix = '.dll'
-	]
-}
-
-.VSPlatformToolset = 'v141'
-.VS2017Version = '14.16.27023'
-
-#include "windows/windows10_sdk.bff"
-#include "windows/visual_studio2017.bff"
-
-#include "msvc.bff"

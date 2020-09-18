@@ -35,3 +35,4 @@ VSSolution('Sln_All')
 	.SolutionMinimumVisualStudioVersion = .VSVersion
 }
 #endif // __WINDOWS__
+
