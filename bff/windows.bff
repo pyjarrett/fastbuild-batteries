@@ -13,6 +13,8 @@
     .LibPrefix = ''
     .LibStaticSuffix = '.lib'
     .LibSharedSuffix = '.dll'
+
+    .Platform = 'x64'
 ]
 
 .SolutionBase = '$OutputBase$/'
@@ -23,6 +25,7 @@
 
 .ProjectDefaults = [
     .PlatformToolset = .VSPlatformToolset
+    .ProjectDefaultsRunFBuild = 'cd ^$(SolutionDir)\..\ &amp; fbuild -vs -monitor -fastcancel -cache'
 ]
 
 #include "windows/windows10_sdk.bff"

@@ -25,6 +25,18 @@ VCXProject('Project_Update')
 }
 
 .All_Projects + { 'Project_Update' }
+
+.SolutionConfigDebug = [
+    .Platform = 'x64'
+    .Config = 'Debug'
+]
+
+.SolutionConfigRelease = [
+    .Platform = 'x64'
+    .Config = 'Release'
+]
+.SolutionConfigs = { .SolutionConfigDebug, .SolutionConfigRelease }
+
 VSSolution('Sln_All')
 {
 	.SolutionOutput = '$SolutionBase$/All.sln'

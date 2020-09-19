@@ -48,6 +48,7 @@
 
 	.Compiler_MSVC = [
 		.OS = 'Windows'
+
 		.Compiler = 'MSVC'
 		.CompilerOptions = '"%1"'           // Input
 			+ ' /Fo"%2"'       // Output
